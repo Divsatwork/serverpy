@@ -4,6 +4,8 @@ import logging
 import json
 import yaml
 
+log = logging.getLogger()
+
 class InputProcessor(Processor):
     '''
     ---------------
@@ -36,14 +38,14 @@ class InputProcessor(Processor):
                 with open(self.config_file) as f:
                     config = yaml.safe_load(f)
         except Exception as e:
-            logging.error(f'Error occured while reading file: {self.config_file}')
+            log.error(f'Error occured while reading file: {self.config_file}')
             raise Exception(f'Error occured while reading file: {self.config_file}')
         
         self.setting, errors = self.validate_config(config)
         
         if errors:
             raise Exception(f'Errors: {errors}')
-        logging.info(f"Settings loaded, {self.setting}")
+        log.info(f"Settings loaded, {self.setting}")
         return self.setting, errors
     
     def process(self):
@@ -53,7 +55,7 @@ class InputProcessor(Processor):
         try:
             open(self.config_file)
         except:
-            logging.error(f'Error occurred while attempting to open config file. {self.config_file}')
+            log.error(f'Error occurred while attempting to open config file. {self.config_file}')
             raise Exception(f'Error occurred while opening file: {self.config_file}. Please make sure the path is correct.')
 
     def verify_config(self, config):
@@ -62,6 +64,8 @@ class InputProcessor(Processor):
             errors.append("Configuration not of type dict")
             return errors
         for key, value in config.items():
+            if key == "meta-info":
+                continue
             if type(key) is not str:
                 errors.append(f"Not a service name. Check the service name: {key}")
                 continue
@@ -98,10 +102,13 @@ class InputProcessor(Processor):
         
         errors = self.verify_config(config)
         if errors:
+            log.error(errors)
             return {}, errors
 
         setting = Setting()
         for key, value in config.items():
+            if key == "meta-info":
+                continue
             configuration = Configuration(server_urls=value.get('server'),
             service_name=key, poll_method=value.get('polling').get('method'), 
             poll_endpoint=value.get('polling').get('endpoint'), apis = value.get('apis'))

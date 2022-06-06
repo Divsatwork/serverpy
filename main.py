@@ -15,16 +15,21 @@ Github Link:
 https://github.com/Divsatwork/servpy
 """
 import argparse
-from curses import meta
+from discovery_server import DiscoveryServer
 
 from input_processor import InputProcessor
+from request_processor import RequestProcessor
 
-def main(*args, **kwargs):
+def main(args):
     """
     The main driver function which will spawn all the nodes and servers based on the input file provided
     by the user.
     """
-    pass
+    input_processor = InputProcessor('Input Processor', args.c)
+    settings, _ = input_processor.process()
+    discovery_server = DiscoveryServer('Discovery Server', settings=settings)
+    request_processor = RequestProcessor('Request Processor', settings=settings)
+    discovery_server.run()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Welcome to servpy!")
@@ -32,9 +37,6 @@ if __name__ == "__main__":
     parser.add_argument('-l', metavar='logging_level', help='Logging level for the application', required=False, default='DEBUG')
 
     args = parser.parse_args()
-    # main(args)
-
-    p = InputProcessor('Input Processor', 'test.json')
-    settings, errors = p.process()
-    print(settings)
-    print(errors)
+    main(args)
+    
+    
