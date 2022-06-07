@@ -1,6 +1,8 @@
 import json
 from models import Server
 import web
+import threading
+
 
 class DiscoveryServer(Server):
     '''
@@ -23,11 +25,12 @@ class DiscoveryServer(Server):
     def __initialize_components(self):
         if not self.settings:
             raise Exception('Cannot start the application as no settings were found!')
-
+        # TODO: Initialize variable here
 
     def run(self):
         self.__initialize_components()
         self.__start_discovery_server()
+        # TODO: Spawn different threads for each subprocess
         
     def __start_discovery_server(self):
         """
@@ -38,7 +41,7 @@ class DiscoveryServer(Server):
         )
 
         app = web.application(urls, globals())        
-        
+        # TODO: Get port from settings here
         web.httpserver.runsimple(app.wsgifunc(), ("0.0.0.0", 8888))
 
 class health:

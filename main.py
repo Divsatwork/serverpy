@@ -15,16 +15,19 @@ Github Link:
 https://github.com/Divsatwork/servpy
 """
 import argparse
-from discovery_server import DiscoveryServer
+from src.constants import SERVPY_LOGO
+from src.discovery_server import DiscoveryServer
 
-from input_processor import InputProcessor
-from request_processor import RequestProcessor
+from src.input_processor import InputProcessor
+from src.request_processor import RequestProcessor
 
 def main(args):
     """
     The main driver function which will spawn all the nodes and servers based on the input file provided
     by the user.
     """
+    print(SERVPY_LOGO)
+    print("Initializing components")
     input_processor = InputProcessor('Input Processor', args.c)
     settings, _ = input_processor.process()
     discovery_server = DiscoveryServer('Discovery Server', settings=settings)
@@ -32,7 +35,7 @@ def main(args):
     discovery_server.run()
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Welcome to servpy!")
+    parser = argparse.ArgumentParser(description=SERVPY_LOGO)
     parser.add_argument('-c', metavar='config_file', type=str, help='Input YML or JSON file', required=True)
     parser.add_argument('-l', metavar='logging_level', help='Logging level for the application', required=False, default='DEBUG')
 

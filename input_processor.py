@@ -1,11 +1,11 @@
-from models import Configuration, Processor, Setting
+from models import Configuration, MetaInfo, Processor, Setting
 from constants import POLLING_METHOD_CHOICES as polling_method_choices
 import logging
 import json
 import yaml
 
 log = logging.getLogger()
-
+# TODO: Implement constants here
 class InputProcessor(Processor):
     '''
     ---------------
@@ -108,9 +108,11 @@ class InputProcessor(Processor):
         setting = Setting()
         for key, value in config.items():
             if key == "meta-info":
-                continue
-            configuration = Configuration(server_urls=value.get('server'),
-            service_name=key, poll_method=value.get('polling').get('method'), 
-            poll_endpoint=value.get('polling').get('endpoint'), apis = value.get('apis'))
+                # Processing the meta info here
+                meta = MetaInfo(**value)
+                setting.__setattr__('meta_info', meta)
+            # For each configuration, get a new Configuration obj
+            configuration = Configuration(key, 
+            value.get('server'), value.get('polling').get('method'), value.get('polling').get('endpoint'), value.get('apis'))
             setting.add(configuration)
         return setting, None
