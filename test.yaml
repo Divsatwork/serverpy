@@ -1,0 +1,29 @@
+service1:
+  server:
+    - google.com
+    - google.co.in
+  polling:
+    method: ping
+    frequency: 80
+    retries: 0
+    packet_limit: 5000
+  apis:
+    - /first
+    - /second/sample
+service2:
+  server:
+    - '127.0.0.1:8080'
+  polling:
+    method: health
+    endpoint: /health
+    retries: 3
+    retry_delay: 10
+    packet_limit: 10000
+  apis:
+    - /second
+    - /third
+meta-info:
+  discovery_server_name: My Discovery Server
+  request_processor_name: My Request Processor
+  discovery_server_port: 8008
+  request_processor_port: 8080

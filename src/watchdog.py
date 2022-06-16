@@ -1,0 +1,54 @@
+import time
+import requests
+from .utils import ping, get_unique_id, process_url
+from .constants import POLLING_HEALTH, POLLING_PING, ACTIVE_STATUS, INACTIVE_STATUS, SERVER_ERROR_STATUS, SERVER_UNREACHABLE_STATUS
+from .models import ServiceStatistics, StatisticsPacket, Watcher
+
+
+class WatchDog(Watcher):
+    def __init__(self, server_url, polling_method, polling_url, frequency, retries, retry_delay, statistics: ServiceStatistics, *args, **kwargs) -> None:
+        super().__init__(server_url, polling_method, polling_url, statistics, *args, **kwargs)
+        self.frequency = frequency
+        self.retries = retries
+        self.retry_delay = retry_delay
+        self._id = get_unique_id()
+        print(f"Woof woof (ID={self._id}). I will be watching: {self.server_url} using {self.polling_method} after every {self.frequency} seconds.")
+
+    def __watch(self):
+        url = process_url(self.server_url)
+        self.statistics.set_check_start()
+        while(True):
+            print(f"{self._id} polling the server..")
+            packet = StatisticsPacket()
+            packet.mark_start()
+            try:
+                if self.polling_method == POLLING_PING:
+                    if ping(url):
+                        # Ping success
+                        packet.set_status(ACTIVE_STATUS)
+                    else:
+                        packet.set_status(INACTIVE_STATUS)
+                elif self.polling_method == POLLING_HEALTH:
+                    response = requests.get(url+self.polling_url)
+                    if response.status_code == 200:
+                        packet.set_status(ACTIVE_STATUS)
+                    elif response.status_code == 500:
+                        pass
+            except ConnectionError as e:
+                packet.set_status(SERVER_UNREACHABLE_STATUS)
+                packet.set_response(e)
+                self.statistics.set_last_failure()
+            except Exception as e:
+                packet.set_status(SERVER_ERROR_STATUS)
+                packet.set_response(str(e))
+                self.statistics.set_last_failure()
+            packet.mark_end()
+            self.statistics.register_packet(packet)
+            self.statistics.set_last_checked_at()
+            print(f"{self._id} going for a nap")
+            time.sleep(self.frequency)
+    
+    def watch(self):
+        self.__watch()
+
+    
