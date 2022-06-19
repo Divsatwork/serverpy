@@ -32,7 +32,7 @@ class __dump:
         except:
             return ERROR_RESPONSE
 
-class DiscoveryServer(Server):
+class _DiscoveryServer(Server):
     '''
     ----------------
     Discovery Server

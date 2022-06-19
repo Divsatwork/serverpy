@@ -13,14 +13,18 @@ Divs
 Github Link:
 ============
 https://github.com/Divsatwork/servpy
+
+LinkedIn Link:
+==============
+https://www.linkedin.com/in/divyansh-chopra
 """
 import argparse
 from threading import Thread
 from src.constants import SERVPY_LOGO
-from src.discovery_server import DiscoveryServer
+from src.discovery_server import _DiscoveryServer
 
 from src.input_processor import InputProcessor
-from src.request_processor import RequestProcessor
+from src.request_processor import _RequestProcessor
 
 def main(args):
     """
@@ -31,8 +35,8 @@ def main(args):
     print("Initializing components")
     input_processor = InputProcessor('Input Processor', args.c)
     settings, _ = input_processor.process()
-    discovery_server = DiscoveryServer('Discovery Server', settings=settings)
-    request_processor = RequestProcessor('Request Processor', settings=settings)
+    discovery_server = _DiscoveryServer('Discovery Server', settings=settings)
+    request_processor = _RequestProcessor('Request Processor', settings=settings)
     discovery_server.run()
     
 
