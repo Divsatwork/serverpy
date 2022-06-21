@@ -14,6 +14,24 @@ class InputProcessor(Processor):
 
     Processes the input JSON/YAML file and maps all the details accordingly.
 
+    In the input file, each service will have it's own listing. For example:
+    {
+        "service 1": { service 1 details }
+    }\\
+    The details for each service contain the following things:
+    1. Service instance url (host)
+    2. Polling coinfugration for that service instance.
+    3. List of APIs that the instances of the service listen to.
+
+    The service instance urls can be passed in two ways:
+    1. Using dictionary style to seperate out all the instances and provide different polling
+    configuration for each instance.
+    2. Using list to provide all the instance, the same polling configuration.
+
+    For more examples see:
+    1. https://github.com/Divsatwork/servpy/blob/main/test.json
+    2. https://github.com/Divsatwork/servpy/blob/main/test.yaml
+
     '''
     def __init__(self, processor_name: str, filename: str, *args, **kwargs):
         super().__init__(processor_name=processor_name, *args, **kwargs)
