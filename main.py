@@ -37,6 +37,7 @@ def main(args):
     discovery_server = _DiscoveryServer('Discovery Server', settings=settings)
     request_processor = _RequestProcessor('Request Processor', settings=settings)
     discovery_server.run()
+    request_processor.process()
     
 
 if __name__ == "__main__":
