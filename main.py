@@ -19,7 +19,6 @@ LinkedIn Link:
 https://www.linkedin.com/in/divyansh-chopra
 """
 import argparse
-from threading import Thread
 from src.constants import SERVPY_LOGO
 from src.discovery_server import _DiscoveryServer
 
