@@ -37,3 +37,11 @@ def process_url(url: str):
     processed_url+=hostname
 
     return processed_url
+
+def check_type(variable, expected_type, errors) -> None:
+    if type(variable) is not expected_type:
+        errors.append(f"{variable} is not of type {expected_type}")
+
+def check_empty(variable, errors) -> None:
+    if not variable:
+        errors.append(f"Illegal values passed for {variable}")
