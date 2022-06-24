@@ -37,18 +37,6 @@ class Configuration:
     Smallest module of the input configuration file.
     One configuration is equivalent to One service details in the input json/yaml.
 
-    Parameters
-    ----------
-    file_loc : str
-        The file location of the spreadsheet
-    print_cols : bool, optional
-        A flag used to print the columns to the console (default is False)
-
-    Returns
-    -------
-    list
-        a list of strings representing the header columns
-
     service_name -- Service Names
     '''
     def __init__(self, service_name, server_urls, poll_method, poll_endpoint, apis,
