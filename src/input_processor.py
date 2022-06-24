@@ -1,5 +1,5 @@
 from tabnanny import check
-from utils import check_empty, check_type
+from .utils import check_empty, check_type
 from .models import Configuration, MetaInfo, Processor, Setting
 from .constants import DEFAULT_META_INFO, POLLING_METHOD_CHOICES as polling_method_choices
 import logging
@@ -60,7 +60,7 @@ class InputProcessor(Processor):
             raise Exception(f'Error occurred while opening file: {self.config_file}. Please make sure the path is correct.')
 
     def parse_input_file(self, input_file: dict):
-        self.__parse_input_file(input_file)
+        return self.__parse_input_file(input_file)
 
     def process(self):
         return self.__process()
@@ -85,7 +85,7 @@ class InputProcessor(Processor):
         except Exception as e:
             log.error(f'Error occured while reading file: {self.config_file}')
             raise Exception(f'Error occured while reading file: {self.config_file}')
-        
+
         self.setting, errors = self.parse_input_file(config)
         
         if errors:
@@ -107,12 +107,12 @@ class InputProcessor(Processor):
             check_empty(k, errors)
             check_empty(v, errors)
             check_empty(v.get('servers'), errors)
-            check_type(v.get('apis'), list)
-            check_empty(v.get('apis'))
+            check_type(v.get('apis'), list, errors)
+            check_empty(v.get('apis'), errors)
 
             if v.get('servers') and type(v.get('servers')) is list:
-                check_type(v.get('polling'), dict)
-                check_empty(v.get('polling'))
+                check_type(v.get('polling'), dict, errors)
+                check_empty(v.get('polling'), errors)
                 if v.get('polling'):
                     # Meaning polling section was specified. However, we will check the specifics again
                     polling = v.get('polling')
@@ -140,7 +140,7 @@ class InputProcessor(Processor):
         """
         if input_file.get('meta-info'):
             meta = DEFAULT_META_INFO.copy()
-            for k,v in input_file.get('meta-info'):
+            for k,v in input_file.get('meta-info').items():
                 meta[k] = v
             return MetaInfo(**meta)
         else:
@@ -149,8 +149,9 @@ class InputProcessor(Processor):
 
     def __import_settings_from_input(self, input_file: dict):
         setting = Setting()
-        for k, v in input_file:
-            setting.add()
+        for k, v in input_file.items():
+            setting.add([])
+        return setting
 
     def __parse_input_file(self, input_file: dict):
         if not input_file:

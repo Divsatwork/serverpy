@@ -1,19 +1,21 @@
+from constants import DEFAULT_POLLING_FREQUENCY, STATS_PACKET_LIMIT
 from models import Configuration
 
 
 class _ServiceInstanceConfiguration(Configuration):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.service_name = service_name
-        self.server_urls = server_urls
-        self.poll_method = poll_method
-        self.poll_endpoint = poll_endpoint
-        self.poll_retries = poll_retries
-        self.poll_delay = poll_delay
-        self.poll_freq = poll_frequency
-        self.packet_limit: int = packet_limit
-        self.apis = apis
-
+        config = {
+            "service_name": kwargs.get('service_name'),
+            "server_url": kwargs.get('server_url'),
+            "poll_method": kwargs.get('poll_method'),
+            "poll_endpoint": kwargs.get('poll_endpoint') if kwargs.get('poll_endpoint') else None,
+            "poll_retries": kwargs.get('poll_retries') if kwargs.get('poll_retries') else 0,
+            "poll_delay": kwargs.get('poll_delay') if kwargs.get('poll_delay') else None,
+            "poll_freq": kwargs.get('poll_frequency') if kwargs.get('poll_frequency') else DEFAULT_POLLING_FREQUENCY,
+            "packet_limit": kwargs.get('packet_limit') if kwargs.get('packet_limit') else STATS_PACKET_LIMIT,
+            "apis": kwargs.get('apis')
+        }
+        super().__init__(**config)
 
 class _ServiceConfiguration:
     
