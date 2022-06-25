@@ -1,17 +1,21 @@
 service1:
-  server:
-    - google.com
-    - google.co.in
-  polling:
-    method: ping
-    frequency: 80
-    retries: 0
-    packet_limit: 5000
+  servers:
+    google.com:
+      method: ping
+      frequency: 80
+      retries: 0
+      packet_limit: 5000
+      priority: high
+    google.co.in:
+      method: ping
+      frequency: 80
+      retries: 0
+      packet_limit: 5000
   apis:
     - /first
     - /second/sample
 service2:
-  server:
+  servers:
     - '127.0.0.1:8080'
   polling:
     method: health

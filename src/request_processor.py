@@ -1,7 +1,7 @@
 from .models import Processor, Setting
 
 
-class RequestProcessor(Processor):
+class _RequestProcessor(Processor):
     """
     1. Map urls to server urls.
     2. pick an instance and forward your request there.
