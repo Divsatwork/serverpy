@@ -62,11 +62,12 @@ class _DiscoveryServer(Server):
         watchdogs = list()
         for config in self.settings:
             # create watchdog here
-            for url in config.server_urls:
-                service_stats = ServiceStatistics(config, url)
-                services_stats.append(service_stats)
-                watchdogs.append(WatchDog(url, config.poll_method, config.poll_endpoint,
-                config.poll_freq, config.poll_retries, config.poll_delay, service_stats))
+            print(config)
+            url = config.server_urls
+            service_stats = ServiceStatistics(config, url)
+            services_stats.append(service_stats)
+            watchdogs.append(WatchDog(url, config.poll_method, config.poll_endpoint,
+            config.poll_freq, config.poll_retries, config.poll_delay, service_stats))
         self.statistics = Statistics(service_statistics=services_stats)
         global statistics
         statistics = self.statistics
