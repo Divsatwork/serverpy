@@ -17,13 +17,5 @@ class _ServiceInstanceConfiguration(Configuration):
             "priority": kwargs.get('priority') if kwargs.get('priority') else None
         }
         super().__init__(**config)
-
-class _ServiceConfiguration:
-    
-    def __init__(self):
-        self.service_configuration = []
-
-    def add(self, config: _ServiceInstanceConfiguration):
-        self.service_configuration.append(config)
         
 

@@ -1,6 +1,6 @@
 from tabnanny import check
 
-from .service_configuration import _ServiceConfiguration, _ServiceInstanceConfiguration
+from .service_configuration import _ServiceInstanceConfiguration
 from .utils import check_empty, check_type
 from .models import Configuration, MetaInfo, Processor, Setting
 from .constants import DEFAULT_META_INFO, POLLING_METHOD_CHOICES as polling_method_choices
@@ -153,20 +153,18 @@ class InputProcessor(Processor):
     def __import_settings_from_input(self, input_file: dict):
         setting = Setting()
         for k, v in input_file.items():
-            service_config = _ServiceConfiguration()
             if type(v.get('servers')) is list:
                 # This means all the server instances will have the same polling information
                 for instance in v.get('servers'):
                     config = {"service_name": k, "server_url": instance, **v }
                     service_instance_config = _ServiceInstanceConfiguration(**config)
-                    service_config.add(service_instance_config)
+                    setting.add(service_instance_config)
             elif type(v.get('servers')) is dict:
                 # This means that all the server instances have different polling information
                 for _k, _v in v.get('servers').items():
                     config = {"service_name": k, "server_url": _k, **_v, **v}
                     service_instance_config = _ServiceInstanceConfiguration(**config)
-                    service_config.add(service_instance_config)
-            setting.add(service_config)
+                    setting.add(service_instance_config)
         return setting
 
     def __parse_input_file(self, input_file: dict):
