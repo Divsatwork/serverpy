@@ -3,6 +3,8 @@ import platform    # For getting the operating system name
 import subprocess  # For executing a shell command
 import uuid
 
+from requests import head
+
 def __get_dict__(obj):
     if isinstance(obj, datetime):
         # return dict(year=obj.year, month=obj.month, day=obj.day, hour=obj.hour, minute=obj.minute, second=obj.second)
@@ -48,3 +50,18 @@ def process_url(url: str) -> str:
         return ""
     if not url.startswith('https'):
         return "https://"+url
+
+def adapt_header(txt: str) -> str:
+  """Input: string, header name as it is in web.ctx.env
+  Output: string, header name according to http protocol.
+  es: "HTTP_CACHE_CONTROL" => "Cache-Control"
+  """
+  txt = txt.replace('HTTP_', '')
+  return '-'.join((t[0] + t[1:].lower() for t in txt.split('_')))
+
+def get_request_headers(env: dict) -> dict:
+    headers = dict()
+    for k, v in env.items():
+            if k.startswith('HTTP') or k in ('CONTENT_TYPE', 'CONTENT_LENGTH'):
+                headers[adapt_header(k)] = str(v)
+    return headers
