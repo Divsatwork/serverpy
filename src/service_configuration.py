@@ -14,6 +14,6 @@ class _ServiceInstanceConfiguration(Configuration):
             "poll_frequency": kwargs.get('frequency') if kwargs.get('frequency') else DEFAULT_POLLING_FREQUENCY,
             "packet_limit": kwargs.get('packet_limit') if kwargs.get('packet_limit') else STATS_PACKET_LIMIT,
             "apis": kwargs.get('apis'),
-            "priority": kwargs.get('priority') if kwargs.get('priority') else None
+            "priority": kwargs.get('priority') if kwargs.get('priority') else ""
         }
         super().__init__(**config)

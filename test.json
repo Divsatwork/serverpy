@@ -36,6 +36,6 @@
 		"discovery_server_name": "My Discovery Server",
 		"request_processor_name": "My Request Processor",
 		"discovery_server_port": 8008,
-		"request_processor_port": 8080
+		"request_processor_port": 8081
 	}
 }

@@ -31,7 +31,6 @@ class WatchDog(Watcher):
                         else:
                             packet.set_status(INACTIVE_STATUS)
                     elif self.polling_method == POLLING_HEALTH:
-                        print(url,self.polling_url)
                         _url = url+self.polling_url
                         response = requests.get(_url)
                         if response.status_code == 200:
