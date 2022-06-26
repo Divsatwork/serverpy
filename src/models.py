@@ -40,13 +40,12 @@ class Configuration:
     service_name -- Service Names
     '''
     def __init__(self, service_name, server_urls, poll_method, poll_endpoint, apis,
-    poll_retries, poll_delay, poll_frequency, packet_limit, *args, **kwargs) -> None:
+    poll_retries, poll_frequency, packet_limit, *args, **kwargs) -> None:
         self.service_name = service_name
         self.server_urls = server_urls
         self.poll_method = poll_method
         self.poll_endpoint = poll_endpoint
         self.poll_retries = poll_retries
-        self.poll_delay = poll_delay
         self.poll_freq = poll_frequency
         self.packet_limit: int = packet_limit
         self.apis = apis

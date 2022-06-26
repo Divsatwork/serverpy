@@ -157,12 +157,14 @@ class InputProcessor(Processor):
                 # This means all the server instances will have the same polling information
                 for instance in v.get('servers'):
                     config = {"service_name": k, "server_url": instance, **v }
+                    print(config)
                     service_instance_config = _ServiceInstanceConfiguration(**config)
                     setting.add(service_instance_config)
             elif type(v.get('servers')) is dict:
                 # This means that all the server instances have different polling information
                 for _k, _v in v.get('servers').items():
                     config = {"service_name": k, "server_url": _k, **_v, **v}
+                    print(config)
                     service_instance_config = _ServiceInstanceConfiguration(**config)
                     setting.add(service_instance_config)
         return setting
