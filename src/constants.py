@@ -37,3 +37,4 @@ DEFAULT_META_INFO = {
 
 ERROR_RESPONSE = {"status": "An error occurred while processing your request"}
 SUCCESS_RESPONSE = {"status": "Success"}
+API_MAPPING_NOT_FOUND_RESPONSE = {"status": "No API found with provided endpoint"}

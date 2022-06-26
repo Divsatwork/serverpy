@@ -33,3 +33,18 @@ def check_type(variable, expected_type, errors) -> None:
 def check_empty(variable, errors) -> None:
     if not variable:
         errors.append(f"Illegal values passed for {variable}")
+
+def process_endpoint(endpoint: str) -> str:
+    if not endpoint:
+        return ""
+    if endpoint.endswith('/'):
+        endpoint = endpoint[:-1]
+    if not endpoint.startswith('/'):
+        endpoint = '/'+endpoint
+    return endpoint
+
+def process_url(url: str) -> str:
+    if not url:
+        return ""
+    if not url.startswith('https'):
+        return "https://"+url
