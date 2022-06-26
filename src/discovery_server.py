@@ -62,7 +62,6 @@ class _DiscoveryServer(Server):
         watchdogs = list()
         for config in self.settings:
             # create watchdog here
-            print(config)
             url = config.server_urls
             service_stats = ServiceStatistics(config, url)
             services_stats.append(service_stats)
