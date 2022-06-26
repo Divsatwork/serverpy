@@ -26,18 +26,6 @@ def ping(host):
 
     return subprocess.call(command) == 0
 
-def process_url(url: str):
-    if not url or type(url) is not str:
-        return
-    processed_url = ''
-    if not url.startswith('https'):
-        processed_url+='https://'
-    splits = url.split(':')
-    hostname = splits[0]
-    processed_url+=hostname
-
-    return processed_url
-
 def check_type(variable, expected_type, errors) -> None:
     if type(variable) is not expected_type:
         errors.append(f"{variable} is not of type {expected_type}")
