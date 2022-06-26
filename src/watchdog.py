@@ -6,10 +6,10 @@ from .models import ServiceStatistics, StatisticsPacket, Watcher
 
 
 class WatchDog(Watcher):
-    def __init__(self, server_url, polling_method, polling_url, frequency, retries, retry_delay, statistics: ServiceStatistics, *args, **kwargs) -> None:
-        super().__init__(server_url, polling_method, polling_url, statistics, *args, **kwargs)
-        self.frequency = frequency
-        self.retries = retries
+    def __init__(self, server_urls, poll_method, poll_endpoint, poll_freq, poll_retries, retry_delay, statistics: ServiceStatistics, *args, **kwargs) -> None:
+        super().__init__(server_urls, poll_method, poll_endpoint, statistics, *args, **kwargs)
+        self.frequency = poll_freq
+        self.retries = poll_retries
         self.retry_delay = retry_delay
         self._id = get_unique_id()
         print(f"Woof woof (ID={self._id}). I will be watching: {self.server_url} using {self.polling_method} after every {self.frequency} seconds.")

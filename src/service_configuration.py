@@ -10,6 +10,7 @@ class _ServiceInstanceConfiguration(Configuration):
             "poll_method": kwargs.get('method'),
             "poll_endpoint": kwargs.get('poll_endpoint') if kwargs.get('poll_endpoint') else None,
             "poll_retries": kwargs.get('retries') if kwargs.get('retries') else 0,
+            "retry_delay": kwargs.get('retry_delay') if kwargs.get('retry_delay') else None,
             "poll_frequency": kwargs.get('frequency') if kwargs.get('frequency') else DEFAULT_POLLING_FREQUENCY,
             "packet_limit": kwargs.get('packet_limit') if kwargs.get('packet_limit') else STATS_PACKET_LIMIT,
             "apis": kwargs.get('apis'),

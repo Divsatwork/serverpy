@@ -34,7 +34,6 @@ def main(args):
     print("Initializing components")
     input_processor = InputProcessor('Input Processor', args.c)
     settings, _ = input_processor.process()
-    print(settings)
     discovery_server = _DiscoveryServer('Discovery Server', settings=settings)
     request_processor = _RequestProcessor('Request Processor', settings=settings)
     discovery_server.run()
