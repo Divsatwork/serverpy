@@ -26,14 +26,25 @@ def ping(host):
 
     return subprocess.call(command) == 0
 
-def process_url(url: str):
-    if not url or type(url) is not str:
-        return
-    processed_url = ''
-    if not url.startswith('https'):
-        processed_url+='https://'
-    splits = url.split(':')
-    hostname = splits[0]
-    processed_url+=hostname
+def check_type(variable, expected_type, errors) -> None:
+    if type(variable) is not expected_type:
+        errors.append(f"{variable} is not of type {expected_type}")
 
-    return processed_url
+def check_empty(variable, errors) -> None:
+    if not variable:
+        errors.append(f"Illegal values passed for {variable}")
+
+def process_endpoint(endpoint: str) -> str:
+    if not endpoint:
+        return ""
+    if endpoint.endswith('/'):
+        endpoint = endpoint[:-1]
+    if not endpoint.startswith('/'):
+        endpoint = '/'+endpoint
+    return endpoint
+
+def process_url(url: str) -> str:
+    if not url:
+        return ""
+    if not url.startswith('https'):
+        return "https://"+url

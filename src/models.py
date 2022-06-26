@@ -37,34 +37,26 @@ class Configuration:
     Smallest module of the input configuration file.
     One configuration is equivalent to One service details in the input json/yaml.
 
-    Parameters
-    ----------
-    file_loc : str
-        The file location of the spreadsheet
-    print_cols : bool, optional
-        A flag used to print the columns to the console (default is False)
-
-    Returns
-    -------
-    list
-        a list of strings representing the header columns
-
     service_name -- Service Names
     '''
     def __init__(self, service_name, server_urls, poll_method, poll_endpoint, apis,
-    poll_retries, poll_delay, poll_frequency, packet_limit, *args, **kwargs) -> None:
+    poll_retries, poll_frequency, packet_limit, retry_delay, priority, *args, **kwargs) -> None:
         self.service_name = service_name
         self.server_urls = server_urls
         self.poll_method = poll_method
         self.poll_endpoint = poll_endpoint
         self.poll_retries = poll_retries
-        self.poll_delay = poll_delay
         self.poll_freq = poll_frequency
         self.packet_limit: int = packet_limit
+        self.retry_delay = retry_delay
         self.apis = apis
+        self.priority = priority
     
     def __str__(self) -> str:
         return json.dumps(self, default=__get_dict__, indent=2)
+
+    def get(self, value):
+        return self.__dict__.get(value)
 
 
 class MetaInfo:
@@ -108,6 +100,12 @@ class Setting:
 
     def __iter__(self) -> iter:
         return iter(self.settings)
+
+    def __get_service_instances_by_name__(self, service_name: str) -> list:
+        if not service_name:
+            return list()
+        return sorted((filter(lambda x: x.__dict__.get('service_name') == service_name, self.settings)),
+        key=lambda x: x.__dict__.get('priority'), reverse=True)
 
 
 class StatisticsPacket:

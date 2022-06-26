@@ -1,14 +1,14 @@
 {
 	"service1": {
 		"servers": {
-			"google.com": {
+			"www.google.com": {
 				"method": "ping",
 				"frequency": 80,
 				"retries": 0,
 				"packet_limit": 5000,
 				"priority": "high"
 			},
-			"google.co.in": {
+			"www.google.co.in": {
 				"method": "ping",
 				"frequency": 80,
 				"retries": 0,
@@ -36,6 +36,6 @@
 		"discovery_server_name": "My Discovery Server",
 		"request_processor_name": "My Request Processor",
 		"discovery_server_port": 8008,
-		"request_processor_port": 8080
+		"request_processor_port": 8081
 	}
 }
