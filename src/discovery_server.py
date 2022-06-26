@@ -67,7 +67,7 @@ class _DiscoveryServer(Server):
             service_stats = ServiceStatistics(config, url)
             services_stats.append(service_stats)
             watchdogs.append(WatchDog(url, config.poll_method, config.poll_endpoint,
-            config.poll_freq, config.poll_retries, config.poll_delay, service_stats))
+            config.poll_freq, config.poll_retries, service_stats))
         self.statistics = Statistics(service_statistics=services_stats)
         global statistics
         statistics = self.statistics
