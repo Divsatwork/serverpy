@@ -19,34 +19,31 @@ LinkedIn Link:
 https://www.linkedin.com/in/divyansh-chopra
 """
 import argparse
-from src.constants import SERVPY_LOGO
-from src.discovery_server import _DiscoveryServer
+from .constants import SERVPY_LOGO
+from .discovery_server import _DiscoveryServer
 
-from src.input_processor import InputProcessor
-from src.request_processor import _RequestProcessor
+from .input_processor import InputProcessor
+from .request_processor import _RequestProcessor
 
-def main(args):
+def main():
     """
     The main driver function which will spawn all the nodes and servers based on the input file provided
     by the user.
-    """
-    print(SERVPY_LOGO)
-    print("Initializing components")
-    input_processor = InputProcessor('Input Processor', args.c)
-    settings, _ = input_processor.process()
-    print(settings)
-    discovery_server = _DiscoveryServer('Discovery Server', settings=settings)
-    request_processor = _RequestProcessor('Request Processor', settings=settings)
-    discovery_server.run()
-    request_processor.process()
-    
 
-if __name__ == "__main__":
+    """
     parser = argparse.ArgumentParser(description=SERVPY_LOGO)
     parser.add_argument('-c', metavar='config_file', type=str, help='Input YML or JSON file', required=True)
     parser.add_argument('-l', metavar='logging_level', help='Logging level for the application', required=False, default='DEBUG')
 
     args = parser.parse_args()
-    main(args)
+
+    print(SERVPY_LOGO)
+    print("Initializing components")
+    input_processor = InputProcessor('Input Processor', args.c)
+    settings, _ = input_processor.process() 
+    discovery_server = _DiscoveryServer('Discovery Server', settings=settings)
+    request_processor = _RequestProcessor('Request Processor', settings=settings)
+    discovery_server.run()
+    request_processor.process()
     
     
