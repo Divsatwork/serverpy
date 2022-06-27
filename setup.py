@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="ServerPy",                     # This is the name of the package
-    version="0.0.1",                        # The initial release version
+    version="0.0.2",                        # The initial release version
     author="Divyansh Chopra",                     # Full name of the author
     description="Resource Discovery and Request forwarding library",
     long_description=long_description,      # Long description read from the the readme file
