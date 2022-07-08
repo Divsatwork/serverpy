@@ -26,3 +26,6 @@ class _UIServer(Server):
         deamon = Thread(name='ui_server', target=app.run, kwargs={"use_reloader":False, "port":8009})
         deamon.start()
         print(f"UI Service daemon started. PID = {deamon.native_id}")
+
+class UIServer(_UIServer):
+    pass

@@ -58,15 +58,13 @@ class _DiscoveryServer(Server):
         """
         if not self.settings:
             raise Exception('Cannot start the application as no settings were found!')
-        services_stats = list()
         watchdogs = list()
         for config in self.settings:
             # create watchdog here
             url = config.server_urls
             service_stats = ServiceStatistics(config, url)
-            services_stats.append(service_stats)
+            self.statistics.service_statistics.append(service_stats)
             watchdogs.append(WatchDog(statistics=service_stats, **config.__dict__))
-        self.statistics = Statistics(service_statistics=services_stats)
         global statistics
         statistics = self.statistics
         self.watchdogs = watchdogs
@@ -98,3 +96,6 @@ class _DiscoveryServer(Server):
         deamon.setDaemon(True) # This will die when the main thread dies
         deamon.start()
         print(f"Discovery Service daemon started. PID = {deamon.native_id}")
+
+class DiscoveryServer(_DiscoveryServer):
+    pass
