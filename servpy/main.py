@@ -19,6 +19,8 @@ LinkedIn Link:
 https://www.linkedin.com/in/divyansh-chopra
 """
 import argparse
+
+from .ui_server import _UIServer
 from .constants import SERVPY_LOGO
 from .discovery_server import _DiscoveryServer
 
@@ -43,7 +45,9 @@ def main():
     settings, _ = input_processor.process() 
     discovery_server = _DiscoveryServer('Discovery Server', settings=settings)
     request_processor = _RequestProcessor('Request Processor', settings=settings)
+    ui_server = _UIServer()
     discovery_server.run()
     request_processor.process()
+    ui_server.run()
     
     
