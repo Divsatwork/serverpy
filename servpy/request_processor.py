@@ -135,3 +135,6 @@ class _RequestProcessor(Processor):
         
     def process(self):
         self.__process()
+
+class RequestProcessor(_RequestProcessor):
+    pass

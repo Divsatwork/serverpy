@@ -19,11 +19,15 @@ LinkedIn Link:
 https://www.linkedin.com/in/divyansh-chopra
 """
 import argparse
+
+from .models import Statistics
+
+from .ui_server import UIServer
 from .constants import SERVPY_LOGO
-from .discovery_server import _DiscoveryServer
+from .discovery_server import DiscoveryServer
 
 from .input_processor import InputProcessor
-from .request_processor import _RequestProcessor
+from .request_processor import RequestProcessor
 
 def main():
     """
@@ -41,9 +45,11 @@ def main():
     print("Initializing components")
     input_processor = InputProcessor('Input Processor', args.c)
     settings, _ = input_processor.process() 
-    discovery_server = _DiscoveryServer('Discovery Server', settings=settings)
-    request_processor = _RequestProcessor('Request Processor', settings=settings)
+    statistics = Statistics(service_statistics=list())
+    discovery_server = DiscoveryServer('Discovery Server', settings=settings, statistics=statistics)
+    request_processor = RequestProcessor('Request Processor', settings=settings, statistics=statistics)
+    ui_server = UIServer(settings=settings, statistics=statistics)
     discovery_server.run()
     request_processor.process()
-    
+    ui_server.run()
     

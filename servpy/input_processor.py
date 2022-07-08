@@ -10,7 +10,7 @@ import yaml
 
 log = logging.getLogger()
 # TODO: Implement constants here
-class InputProcessor(Processor):
+class _InputProcessor(Processor):
     '''
     ---------------
     Input Processor
@@ -189,3 +189,5 @@ class InputProcessor(Processor):
         return setting, None
 
     
+class InputProcessor(_InputProcessor):
+    pass
