@@ -28,23 +28,28 @@ class WatchDog(Watcher):
                         if ping(url):
                             # Ping success
                             packet.set_status(ACTIVE_STATUS)
+                            self.statistics.set_last_status(ACTIVE_STATUS)
                         else:
                             packet.set_status(INACTIVE_STATUS)
+                            self.statistics.set_last_status(INACTIVE_STATUS)
                     elif self.polling_method == POLLING_HEALTH:
                         _url = url+self.polling_url
                         response = requests.get(_url)
                         if response.status_code == 200:
                             packet.set_status(ACTIVE_STATUS)
+                            self.statistics.set_last_status(ACTIVE_STATUS)
                         elif response.status_code == 500:
                             pass
                 except ConnectionError as e:
                     packet.set_status(SERVER_UNREACHABLE_STATUS)
                     packet.set_response(e)
                     self.statistics.set_last_failure()
+                    self.statistics.set_last_status(SERVER_UNREACHABLE_STATUS)
                 except Exception as e:
                     packet.set_status(SERVER_ERROR_STATUS)
                     packet.set_response(str(e))
                     self.statistics.set_last_failure()
+                    self.statistics.set_last_status(SERVER_ERROR_STATUS)
                 packet.mark_end()
                 self.statistics.register_packet(packet)
                 self.statistics.set_last_checked_at()

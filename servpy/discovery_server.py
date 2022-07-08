@@ -4,7 +4,7 @@ from threading import Thread
 from .constants import SUCCESS_RESPONSE, ERROR_RESPONSE, DEFAULT_DISCOVERY_SERVER_PORT
 
 from .watchdog import WatchDog
-from .models import Server, ServiceStatistics, Statistics
+from .models import Server, ServiceStatistics
 
 import web
 

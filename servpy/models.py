@@ -147,6 +147,7 @@ class ServiceStatistics:
         self.last_failure = None
         self.stats_packets = []
         self.packet_limit = service_config.packet_limit
+        self.last_status = None
     
     def __str__(self) -> str:
         return json.dumps(self, default=__get_dict__, indent=2)
@@ -166,6 +167,9 @@ class ServiceStatistics:
 
     def set_last_failure(self) -> None:
         self.last_failure = dt.now()
+
+    def set_last_status(self, status: str) -> None:
+        self.last_status = status
 
 
 
