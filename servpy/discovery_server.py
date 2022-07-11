@@ -1,7 +1,8 @@
 import json
+import logging
 from threading import Thread
 
-from flask import Flask, jsonify
+from flask import Flask
 
 from .utils import make_json_response
 
@@ -44,7 +45,7 @@ class _DiscoveryServer(Server):
             self.statistics.service_statistics.append(service_stats)
             watchdogs.append(WatchDog(statistics=service_stats, **config.__dict__))
         self.watchdogs = watchdogs
-        print("All components of discovery service have been initialized")
+        logging.info("All components of discovery service have been initialized")
 
     def run(self):
         self.__initialize_components()
@@ -55,10 +56,10 @@ class _DiscoveryServer(Server):
         Here we make use of web.py library to build a small server which exposes APIs to query discovery server.
         """
         self.threads = [Thread(target=watchdog.watch) for watchdog in self.watchdogs]
-        print("Starting watchdogs")
+        logging.info("Starting watchdogs")
         for t in self.threads:
             t.start()
-        print("All watchdogs have been started")
+        logging.info("All watchdogs have been started")
         
         port = self.settings.meta_info.discovery_server_port if self.settings.meta_info else DEFAULT_DISCOVERY_SERVER_PORT
         app = Flask(__name__)
@@ -90,11 +91,11 @@ class _DiscoveryServer(Server):
                 return make_json_response(app, ERROR_RESPONSE)
         
 
-        print(f"Starting Discovery Service at localhost:{port}")
+        logging.info(f"Starting Discovery Service at localhost:{port}")
         deamon = Thread(name='ui_server', target=app.run, kwargs={"use_reloader":False, "port":port})
         deamon.setDaemon(True)
         deamon.start()
-        print(f"UI Service daemon started. PID = {deamon.native_id}")
+        logging.info(f"UI Service daemon started. PID = {deamon.native_id}")
 
 class DiscoveryServer(_DiscoveryServer):
     pass

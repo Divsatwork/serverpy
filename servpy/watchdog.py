@@ -1,3 +1,4 @@
+import logging
 import time
 import requests
 from .utils import ping, get_unique_id
@@ -12,7 +13,7 @@ class WatchDog(Watcher):
         self.retries = poll_retries
         self.retry_delay = retry_delay
         self._id = get_unique_id()
-        print(f"Woof woof (ID={self._id}). I will be watching: {self.server_url} using {self.polling_method} after every {self.frequency} seconds.")
+        logging.info(f"Woof woof (ID={self._id}). I will be watching: {self.server_url} using {self.polling_method} after every {self.frequency} seconds.")
 
     def __watch(self):
         url = self.server_url
@@ -20,7 +21,7 @@ class WatchDog(Watcher):
         while(True):
             try_count = 0
             while try_count <= self.retries:
-                print(f"{self._id} polling the server with try {try_count+1}..")
+                logging.info(f"{self._id} polling the server with try {try_count+1}..")
                 packet = StatisticsPacket()
                 packet.mark_start()
                 try:
@@ -50,7 +51,7 @@ class WatchDog(Watcher):
                 self.statistics.set_last_checked_at()
                 try_count+=1
                 time.sleep(self.retry_delay) if self.retry_delay else None
-            print(f"{self._id} going for a nap")
+            logging.info(f"{self._id} going for a nap")
             time.sleep(self.frequency)
     
     def watch(self):

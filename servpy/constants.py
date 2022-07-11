@@ -9,7 +9,7 @@ SERVPY_LOGO = """
 
 DEFAULT_DISCOVERY_SERVER_NAME = "Discovery Server"
 DEFAULT_REQUEST_PROCESSOR_NAME = "Request Processor"
-
+LOGGING_FILE_NAME = "serverpy.log"
 
 POLLING_PING = 'ping'
 POLLING_HEALTH = 'health'

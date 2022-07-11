@@ -19,11 +19,12 @@ LinkedIn Link:
 https://www.linkedin.com/in/divyansh-chopra
 """
 import argparse
+import logging
 
 from .models import Statistics
 
 from .ui_server import UIServer
-from .constants import SERVPY_LOGO
+from .constants import LOGGING_FILE_NAME, SERVPY_LOGO
 from .discovery_server import DiscoveryServer
 
 from .input_processor import InputProcessor
@@ -40,9 +41,11 @@ def main():
     parser.add_argument('-l', metavar='logging_level', help='Logging level for the application', required=False, default='DEBUG')
 
     args = parser.parse_args()
+    logging.basicConfig(filename=LOGGING_FILE_NAME, filemode='a', format='%(name)s - %(asctime)s - %(levelname)s - %(message)s', 
+    level=logging.DEBUG)
 
-    print(SERVPY_LOGO)
-    print("Initializing components")
+    logging.info(SERVPY_LOGO)
+    logging.info("Initializing components")
     input_processor = InputProcessor('Input Processor', args.c)
     settings, _ = input_processor.process() 
     statistics = Statistics(service_statistics=list())
