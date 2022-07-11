@@ -1,3 +1,4 @@
+import logging
 from threading import Thread
 
 import requests
@@ -33,9 +34,9 @@ class __request_handler:
                 headers = get_request_headers(web.ctx.env)
                 return final_url, headers
             except Exception as e:
-                print(f"Exception occurred while processing endpoint: {_endpoint}")
-                print(e)
-                return json.dumps(ERROR_RESPONSE)
+                logging.error(f"Exception occurred while processing endpoint: {_endpoint}")
+                logging.error(e)
+                return None, None
 
     def GET(self, endpoint):
         try:
@@ -45,11 +46,11 @@ class __request_handler:
             resp = requests.get(final_url, headers=headers)
             return resp.content
         except ConnectionError as e:
-            print(f"Connection error occurred while making API call [{final_url}]")
+            logging.error(f"Connection error occurred while making API call [{final_url}]")
         except Exception as e:
-            print(f"Exception occurred for API call: [{final_url}]")
-            print(e)
-            return json.dumps(ERROR_RESPONSE)
+            logging.error(f"Exception occurred for API call: [{final_url}]")
+            logging.error(e)
+        return json.dumps(ERROR_RESPONSE)
         
 
     def POST(self, endpoint):
@@ -58,11 +59,11 @@ class __request_handler:
             resp = requests.post(final_url, data=json.loads(web.data()), headers=headers)
             return resp.content
         except ConnectionError as e:
-            print(f"Connection error occurred while making API call [{final_url}]")
+            logging.error(f"Connection error occurred while making API call [{final_url}]")
         except Exception as e:
-            print(f"Exception occurred for API call: [{final_url}]")
-            print(e)
-            return json.dumps(ERROR_RESPONSE)
+            logging.error(f"Exception occurred for API call: [{final_url}]")
+            logging.error(e)
+        return json.dumps(ERROR_RESPONSE)
 
     def PATCH(self, endpoint):
         try:
@@ -70,11 +71,11 @@ class __request_handler:
             resp = requests.patch(final_url, data=json.loads(web.data()), headers=headers)
             return resp.content
         except ConnectionError as e:
-            print(f"Connection error occurred while making API call [{final_url}]")
+            logging.error(f"Connection error occurred while making API call [{final_url}]")
         except Exception as e:
-            print(f"Exception occurred for API call: [{final_url}]")
-            print(e)
-            return json.dumps(ERROR_RESPONSE)
+            logging.error(f"Exception occurred for API call: [{final_url}]")
+            logging.error(e)
+        return json.dumps(ERROR_RESPONSE)
     
     def DELETE(self, endpoint):
         try:
@@ -84,11 +85,11 @@ class __request_handler:
             resp = requests.delete(final_url, headers=headers)
             return resp.content
         except ConnectionError as e:
-            print(f"Connection error occurred while making API call [{final_url}]")
+            logging.error(f"Connection error occurred while making API call [{final_url}]")
         except Exception as e:
-            print(f"Exception occurred for API call: [{final_url}]")
-            print(e)
-            return json.dumps(ERROR_RESPONSE)
+            logging.error(f"Exception occurred for API call: [{final_url}]")
+            logging.error(e)
+        return json.dumps(ERROR_RESPONSE)
 
 
 class _RequestProcessor(Processor):
@@ -124,10 +125,10 @@ class _RequestProcessor(Processor):
             deamon = Thread(name='request_processor', target=web.httpserver.runsimple, args=(app.wsgifunc(), ("0.0.0.0", port)))
             deamon.setDaemon(True) # This will die when the main thread dies
             deamon.start()
-            print(f"Request Processor daemon started. PID = {deamon.native_id}")
+            logging.error(f"Request Processor daemon started. PID = {deamon.native_id}")
         except Exception as e:
-            print("Error occurred while booting up Request Processor")
-            print(e)
+            logging.error("Error occurred while booting up Request Processor")
+            logging.error(e)
 
     def __get_url_mappings(self):
         global url_map

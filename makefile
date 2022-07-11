@@ -1,5 +1,5 @@
 run-server:
-	python3 servpy-runner.py -c test.json
+	python3 servpy-runner.py -c test.json > stdout.log
 
 ui-server:
 	cd front_end && npm run dev
