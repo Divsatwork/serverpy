@@ -1,36 +1,14 @@
 import json
 from threading import Thread
 
+from flask import Flask, jsonify
+
+from .utils import make_json_response
+
 from .constants import SUCCESS_RESPONSE, ERROR_RESPONSE, DEFAULT_DISCOVERY_SERVER_PORT
 
 from .watchdog import WatchDog
-from .models import Server, ServiceStatistics, Statistics
-
-import web
-
-statistics = None
-
-class __health:
-    def GET(self):
-        return json.dumps({"status": "Discovery Server running"})
-
-class __stats:
-    def GET(self):
-        global statistics
-        web.header('Content-Type', 'application/json')
-        return statistics
-
-class __dump:
-    def GET(self):
-        print("Dumping statistics to current file")
-        global statistics
-        web.header('Content-Type', 'application/json')
-        try:
-            with open('file.dump', 'w') as file:
-                json.dump(statistics, file)
-            return SUCCESS_RESPONSE
-        except:
-            return ERROR_RESPONSE
+from .models import Server, ServiceStatistics
 
 class _DiscoveryServer(Server):
     '''
@@ -65,9 +43,8 @@ class _DiscoveryServer(Server):
             service_stats = ServiceStatistics(config, url)
             self.statistics.service_statistics.append(service_stats)
             watchdogs.append(WatchDog(statistics=service_stats, **config.__dict__))
-        global statistics
-        statistics = self.statistics
         self.watchdogs = watchdogs
+        print("All components of discovery service have been initialized")
 
     def run(self):
         self.__initialize_components()
@@ -81,21 +58,43 @@ class _DiscoveryServer(Server):
         print("Starting watchdogs")
         for t in self.threads:
             t.start()
-        
-        urls = (
-            '/health', '__health',
-            '/stats', '__stats',
-            '/dump', '__dump'
-        )
-
-        app = web.application(urls, globals())        
+        print("All watchdogs have been started")
         
         port = self.settings.meta_info.discovery_server_port if self.settings.meta_info else DEFAULT_DISCOVERY_SERVER_PORT
+        app = Flask(__name__)
+
+        # Serve React App
+        @app.route('/health')
+        def health():
+            return make_json_response(app, {"status": "Discovery Server running"})
+
+        @app.route('/stats')
+        def stats():
+            """
+            1. Iterate in the service_statistics section
+            2. Get all different service_name and group objects accordingly
+            """
+            polished_stats = dict()
+            service_names = set([i.service_name for i in self.statistics.service_statistics])
+            for service in service_names:
+                polished_stats[service] = [i.__dict__ for i in list(filter(lambda x: x.service_name == service, self.statistics.service_statistics))]
+            return make_json_response(app, polished_stats)
+
+        @app.route('/dump')
+        def dump():
+            try:
+                with open('stats.dump', 'w') as f:
+                    json.dump(self.statistics, f)
+                return make_json_response(app, SUCCESS_RESPONSE)
+            except:
+                return make_json_response(app, ERROR_RESPONSE)
+        
+
         print(f"Starting Discovery Service at localhost:{port}")
-        deamon = Thread(name='discovery_server', target=web.httpserver.runsimple, args=(app.wsgifunc(), ("0.0.0.0", port)))
-        deamon.setDaemon(True) # This will die when the main thread dies
+        deamon = Thread(name='ui_server', target=app.run, kwargs={"use_reloader":False, "port":port})
+        deamon.setDaemon(True)
         deamon.start()
-        print(f"Discovery Service daemon started. PID = {deamon.native_id}")
+        print(f"UI Service daemon started. PID = {deamon.native_id}")
 
 class DiscoveryServer(_DiscoveryServer):
     pass

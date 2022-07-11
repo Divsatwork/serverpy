@@ -1,4 +1,5 @@
 from datetime import datetime
+import json
 import platform    # For getting the operating system name
 import subprocess  # For executing a shell command
 import uuid
@@ -65,3 +66,13 @@ def get_request_headers(env: dict) -> dict:
             if k.startswith('HTTP') or k in ('CONTENT_TYPE', 'CONTENT_LENGTH'):
                 headers[adapt_header(k)] = str(v)
     return headers
+
+def make_json_response(app, data):
+    """
+    Function to convert dictionary into flask json response.
+    """
+    response = app.response_class(
+        response=json.dumps(data, sort_keys=True, default=str),
+        mimetype='application/json'
+    )
+    return response
