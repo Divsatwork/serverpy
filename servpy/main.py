@@ -46,6 +46,7 @@ def main():
 
     logging.info(SERVPY_LOGO)
     logging.info("Initializing components")
+    #testing
     input_processor = InputProcessor('Input Processor', args.c)
     settings, _ = input_processor.process() 
     statistics = Statistics(service_statistics=list())
